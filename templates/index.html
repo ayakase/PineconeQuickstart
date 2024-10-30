@@ -98,21 +98,19 @@
 <div class="container">
     <form action="/search" method="POST">
         <label for="user_input">Enter something:</label>
-        <input type="text" id="user_input" name="user_input" required>
+        <input type="text" id="user_input" name="user_input" value="{{ user_input if user_input else '' }}" required>
         <button type="submit">Submit</button>
     </form>
-    <div style="display: flex; flex-direction: column; gap: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 1rem;margin-top: 1rem;">
 
         {% if matches_results %}
             {% for item in matches_results %}
-                <div style="background-color: rgb(0, 196, 59);">
-                    <div style=" text-align: start;">{{ item.id }}</div>
-                    <div style=" text-align: start;">{{ item.metadata }}</div>
+                <div style="background-color: rgb(148, 249, 178);border-radius: 1rem; padding: 1rem;">
+                    <div style=" text-align: start; font-weight: bold;">ID: {{ item.id }}</div>
+                    <div style=" text-align: start;">{{ item.metadata.text }}</div>
                     <div style=" text-align: start;">{{ item.score }}</div>
                 </div>
             {% endfor %}
-        {% else %}
-            <div>No items found.</div>
         {% endif %}
     </div>
     

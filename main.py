@@ -1,4 +1,4 @@
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 from flask import Flask, jsonify, render_template,request
 from dotenv import load_dotenv
 from pinecone import Pinecone, ServerlessSpec
@@ -11,7 +11,7 @@ pinecone_key = os.getenv('SECRET_KEY')
 pc = Pinecone(api_key=pinecone_key)
 
 print(pinecone_key)
-model = SentenceTransformer("intfloat/multilingual-e5-large")
+# model = SentenceTransformer("intfloat/multilingual-e5-large")
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -60,7 +60,7 @@ def search():
         #     "matches": clean_matches  # Use cleaned matches
         # })
 
-        return render_template('index.html', matches_results=clean_matches)
+        return render_template('index.html', matches_results=clean_matches, user_input=query)
 
 # @app.route('/<text>')
 # def transform(text):
@@ -140,7 +140,7 @@ def query(text):
     results = index.query(
         namespace="ns1",
         vector=embedding[0].values,
-        top_k=3,
+        top_k=5,
         include_values=False,
         include_metadata=True
     )
