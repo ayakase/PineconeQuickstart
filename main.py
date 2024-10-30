@@ -8,6 +8,7 @@ load_dotenv()
 app = Flask(__name__)
 
 pinecone_key = os.getenv('SECRET_KEY')
+index_name = os.getenv('INDEX_NAME')
 pc = Pinecone(api_key=pinecone_key)
 
 print(pinecone_key)
@@ -25,7 +26,6 @@ def search():
         user_input = request.form.get('user_input') 
         if not user_input:
             return render_template('index.html', user_input=user_input)
-        index_name = "itfield"
         index = pc.Index(index_name)
         query = user_input
         embedding = pc.inference.embed(
@@ -38,7 +38,7 @@ def search():
         results = index.query(
             namespace="ns1",
             vector=embedding[0].values,
-            top_k=3,
+            top_k=5,
             include_values=False,
             include_metadata=True
         )
@@ -127,7 +127,6 @@ def search():
 def query(text):
     if not text:
         return 'empty'
-    index_name = "itfield"
     index = pc.Index(index_name)
     query = text
     embedding = pc.inference.embed(
