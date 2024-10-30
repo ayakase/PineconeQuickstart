@@ -100,8 +100,22 @@ def query(text):
         include_metadata=True
     )
     print(results.matches)
-    return results.matches
+    print(f"Type of results.matches: {type(results.matches)}, Content: {results.matches}")
+    clean_matches = [
+        {
+            "id": match.get("id"),
+            "metadata": match.get("metadata"),
+            "score": match.get("score"),
+            "values": match.get("values") if isinstance(match.get("values"), list) else []
+        }
+        for match in results.matches
+    ]
 
+    # Return the results as JSON
+    return jsonify({
+        "message": "ok",
+        "matches": clean_matches  # Use cleaned matches
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)
