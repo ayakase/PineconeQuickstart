@@ -11,5 +11,6 @@ FLASK_APP=app.py
 SECRET_KEY= pinecone-api-key
 INDEX_NAME=your-index-name
 
+update index name, sample data
 
 run create index.py first, then upsert data, then run flask server

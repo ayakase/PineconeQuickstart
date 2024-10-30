@@ -9,7 +9,6 @@ load_dotenv()
 pinecone_key = os.getenv('SECRET_KEY')
 pc = Pinecone(api_key=pinecone_key)
 index_name = os.getenv('INDEX_NAME')
-print(pinecone_sample_data)
 data = pinecone_sample_data
 embeddings = pc.inference.embed(
     model="multilingual-e5-large",

@@ -106,9 +106,9 @@
         {% if matches_results %}
             {% for item in matches_results %}
                 <div style="background-color: rgb(148, 249, 178);border-radius: 1rem; padding: 1rem;">
+                    <div style=" text-align: start; font-weight: bold;">Score: {{ item.score }}</div>
                     <div style=" text-align: start; font-weight: bold;">ID: {{ item.id }}</div>
                     <div style=" text-align: start;">{{ item.metadata.text }}</div>
-                    <div style=" text-align: start;">{{ item.score }}</div>
                 </div>
             {% endfor %}
         {% endif %}
