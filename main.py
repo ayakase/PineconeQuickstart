@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template,request
 from dotenv import load_dotenv
 from pinecone import Pinecone, ServerlessSpec
 import os
@@ -13,17 +13,62 @@ pc = Pinecone(api_key=pinecone_key)
 print(pinecone_key)
 model = SentenceTransformer("intfloat/multilingual-e5-large")
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return 'running'
+    user_input = None
+    return render_template('index.html', user_input=user_input)
 
-@app.route('/<text>')
-def transform(text):
-    try:
-        embeddings = model.encode(text).tolist()
-        return jsonify(embeddings)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500  
+@app.route('/search', methods=['POST'])
+def search():
+    user_input = None
+    if request.method == 'POST':
+        user_input = request.form.get('user_input') 
+        if not user_input:
+            return render_template('index.html', user_input=user_input)
+        index_name = "itfield"
+        index = pc.Index(index_name)
+        query = user_input
+        embedding = pc.inference.embed(
+            model="multilingual-e5-large",
+            inputs=[query],
+            parameters={
+                "input_type": "query"
+            }
+        )
+        results = index.query(
+            namespace="ns1",
+            vector=embedding[0].values,
+            top_k=3,
+            include_values=False,
+            include_metadata=True
+        )
+        print(results.matches)
+        print(f"Type of results.matches: {type(results.matches)}, Content: {results.matches}")
+        clean_matches = [
+            {
+                "id": match.get("id"),
+                "metadata": match.get("metadata"),
+                "score": match.get("score"),
+                "values": match.get("values") if isinstance(match.get("values"), list) else []
+            }
+            for match in results.matches
+        ]
+
+        # Return the results as JSON
+        # return jsonify({
+        #     "query": query,
+        #     "matches": clean_matches  # Use cleaned matches
+        # })
+
+        return render_template('index.html', matches_results=clean_matches)
+
+# @app.route('/<text>')
+# def transform(text):
+#     try:
+#         embeddings = model.encode(text).tolist()
+#         return jsonify(embeddings)
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500  
 
 # @app.route('/upsert')
 # def upsert_vectors():
@@ -82,7 +127,7 @@ def transform(text):
 def query(text):
     if not text:
         return 'empty'
-    index_name = "quickstart"
+    index_name = "itfield"
     index = pc.Index(index_name)
     query = text
     embedding = pc.inference.embed(
@@ -113,7 +158,7 @@ def query(text):
 
     # Return the results as JSON
     return jsonify({
-        "message": "ok",
+        "query": query,
         "matches": clean_matches  # Use cleaned matches
     })
 

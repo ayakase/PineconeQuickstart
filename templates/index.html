@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Main Container */
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto; /* Centering the container */
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        /* Input and Button Styling */
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Additional Section Styles */
+        .additional-inputs {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .additional-inputs label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .additional-inputs input[type="text"] {
+            margin-bottom: 15px;
+        }
+
+        /* Style for Message Area */
+        .message-area {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 1.1em;
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form action="/search" method="POST">
+        <label for="user_input">Enter something:</label>
+        <input type="text" id="user_input" name="user_input" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+
+        {% if matches_results %}
+            {% for item in matches_results %}
+                <div style="background-color: rgb(0, 196, 59);">
+                    <div style=" text-align: start;">{{ item.id }}</div>
+                    <div style=" text-align: start;">{{ item.metadata }}</div>
+                    <div style=" text-align: start;">{{ item.score }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div>No items found.</div>
+        {% endif %}
+    </div>
+    
+</div>
+
+<script>
+    
+</script>
+
+</body>
+</html>
