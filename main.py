@@ -42,8 +42,8 @@ def search():
             include_values=False,
             include_metadata=True
         )
-        print(results.matches)
-        print(f"Type of results.matches: {type(results.matches)}, Content: {results.matches}")
+        # print(results.matches)
+        # print(f"Type of results.matches: {type(results.matches)}, Content: {results.matches}")
         clean_matches = [
             {
                 "id": match.get("id"),
